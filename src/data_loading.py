@@ -1,5 +1,5 @@
 import os
-from torch import datasets, transforms
+from torchvision import datasets, transforms
 
 
 def load_dataset(path="../data"):
