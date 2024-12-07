@@ -1,19 +1,23 @@
 import os
 from torchvision import datasets, transforms
 
-
-def load_dataset(path="../data"):
+def load_dataset(path=None):
     """
     This function loads the Fashion MNIST dataset, checks if it is already downloaded in the specified path,
     and if not, downloads it. The dataset is normalized and stored in the given path.
 
     Parameters:
-    - batch_size (int): The number of samples per batch to load. Default is 64.
     - path (str): The directory where the dataset should be stored. Default is "../data".
 
     """
+    if path is None:
+        # Get the absolute path of the project's root directory
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        path = os.path.join(project_root, 'data')
+
     # Check if the dataset is already downloaded
-    if any(os.scandir(path)):
+    if os.path.exists(os.path.join(path, 'FashionMNIST', 'raw')):
+        print("Dataset already downloaded in data folder.")
         return
 
     # Normalization of dataset
@@ -27,3 +31,6 @@ def load_dataset(path="../data"):
     datasets.FashionMNIST(root=path, train=False, download=True, transform=transform)
 
     return
+
+if __name__ == "__main__":
+    load_dataset()

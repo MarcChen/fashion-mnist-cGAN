@@ -20,7 +20,11 @@ This repository implements a **Conditional Generative Adversarial Network (GAN)*
 
 ## Getting Started
 
-1. **Setup**: Follow the instructions in the `README` to set up the environment and install dependencies.
+1. **Setup**: Make the setup script executable and run it to install dependencies and download the dataset:
+    ```sh
+    chmod +x ./setup.sh
+    ./setup.sh
+    ```
 2. **Train the Model**: Run the training scripts to fit the Conditional GAN on the Fashion MNIST dataset.
 3. **Analyze Results**: Use provided notebooks to visualize generated samples, monitor learning curves, and extract insights from the model’s latent representations.
 
