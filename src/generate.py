@@ -7,8 +7,8 @@ from tqdm import tqdm
 def load_models(generator_path, discriminator_path, device):
     # Load the trained models
     G, D = Generator().to(device), Discriminator().to(device)
-    G.load_state_dict(torch.load(generator_path, map_location=device))
-    D.load_state_dict(torch.load(discriminator_path, map_location=device))
+    G.load_state_dict(torch.load(generator_path, map_location=device, weights_only=True))
+    D.load_state_dict(torch.load(discriminator_path, map_location=device, weights_only=True))
     G.eval()
     D.eval()
     return G, D
