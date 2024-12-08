@@ -4,6 +4,7 @@ from torchvision import datasets
 from torch.utils.data import DataLoader
 import argparse
 from tqdm import tqdm
+import os
 from data_loading import load_dataset, get_transform
 from model import Generator, Discriminator
 
@@ -12,7 +13,7 @@ def get_device():
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def save_model(model, save_path, name=""):
-    torch.save(model, save_path + "generator" + name + ".pth" )
+    torch.save(model, os.path.join(save_path, "generator" + name + ".pth"))
 
 def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_path="../checkpoints", save_name=""):
     device = get_device()
