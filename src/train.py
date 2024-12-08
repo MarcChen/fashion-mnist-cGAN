@@ -13,7 +13,7 @@ def get_device():
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def save_model(model, save_path, name=""):
-    torch.save(model, os.path.join(save_path, name + ".pth"))
+    torch.save(model.state_dict(), os.path.join(save_path, name + ".pth"))
 
 def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_path="../checkpoints", save_name=""):
     device = get_device()
@@ -73,8 +73,8 @@ def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_p
     print("Training finished !")
 
     print("Saving the model")
-    save_model(G.state_dict, save_path, "generator" + save_name)
-    save_model(D.state_dict, save_path, "discriminator" + save_name)
+    save_model(G, save_path, "generator" + save_name)
+    save_model(D, save_path, "discriminator" + save_name)
     print(f"Models saved : path {save_path} !")
 
     return
