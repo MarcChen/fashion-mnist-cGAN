@@ -1,6 +1,15 @@
 import os
 from torchvision import datasets, transforms
 
+def get_transform():
+    # Normalization of dataset
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,))
+    ])
+
+    return transform
+
 def load_dataset(path=None):
     """
     This function loads the Fashion MNIST dataset, checks if it is already downloaded in the specified path,
@@ -17,14 +26,11 @@ def load_dataset(path=None):
 
     # Check if the dataset is already downloaded
     if os.path.exists(os.path.join(path, 'FashionMNIST', 'raw')):
-        print("Dataset already downloaded in data folder.")
+        print("Dataset already downloaded in data folder !")
         return
 
     # Normalization of dataset
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
-    ])
+    transform = get_transform()
 
     # Download the dataset and store it in the path
     datasets.FashionMNIST(root=path, train=True, download=True, transform=transform)
