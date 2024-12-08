@@ -3,6 +3,7 @@ from torch import optim
 from torchvision import datasets
 from torch.utils.data import DataLoader
 import argparse
+from tqdm import tqdm
 from data_loading import load_dataset, get_transform
 from model import Generator, Discriminator
 
@@ -32,37 +33,42 @@ def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_p
     print("Starting training...")
     for epoch in range(epochs):
         g_loss_epoch, d_loss_epoch = 0.0, 0.0
-        for batch_idx, (data, target) in enumerate(train_loader):
-            data, target = data.to(device), target.to(device)
-            real_label = torch.full((batch_size, 1), 1., device=device)
-            fake_label = torch.full((batch_size, 1), 0., device=device)
+        with tqdm(total=len(train_loader), desc=f"Epoch {epoch + 1}/{epochs}") as pbar:
+            for batch_idx, (data, target) in enumerate(train_loader):
+                data, target = data.to(device), target.to(device)
+                batch_size = data.size(0)
+                real_label = torch.full((batch_size, 1), 1., device=device)
+                fake_label = torch.full((batch_size, 1), 0., device=device)
 
-            # Train G
-            G.zero_grad()
-            z_noise = torch.randn(batch_size, latent_dim, device=device)
-            x_fake_labels = torch.randint(0, 10, (batch_size,), device=device)
-            x_fake = G(z_noise, x_fake_labels)
-            y_fake_g = D(x_fake, x_fake_labels)
-            g_loss = D.loss(y_fake_g, real_label)
-            g_loss.backward()
-            optim_G.step()
+                # Train G
+                G.zero_grad()
+                z_noise = torch.randn(batch_size, latent_dim, device=device)
+                x_fake_labels = torch.randint(0, 10, (batch_size,), device=device)
+                x_fake = G(z_noise, x_fake_labels)
+                y_fake_g = D(x_fake, x_fake_labels)
+                g_loss = D.loss(y_fake_g, real_label)
+                g_loss.backward()
+                optim_G.step()
 
-            # Train D
-            D.zero_grad()
-            y_real = D(data, target)
-            d_real_loss = D.loss(y_real, real_label)
-            y_fake_d = D(x_fake.detach(), x_fake_labels)
-            d_fake_loss = D.loss(y_fake_d, fake_label)
-            d_loss = (d_real_loss + d_fake_loss) / 2
-            d_loss.backward()
-            optim_D.step()
+                # Train D
+                D.zero_grad()
+                y_real = D(data, target)
+                d_real_loss = D.loss(y_real, real_label)
+                y_fake_d = D(x_fake.detach(), x_fake_labels)
+                d_fake_loss = D.loss(y_fake_d, fake_label)
+                d_loss = (d_real_loss + d_fake_loss) / 2
+                d_loss.backward()
+                optim_D.step()
 
-            g_loss_epoch += g_loss.item()
-            d_loss_epoch += d_loss.item()
+                g_loss_epoch += g_loss.item()
+                d_loss_epoch += d_loss.item()
 
+                pbar.update(1)
+
+        pbar.close()
         g_loss_epoch /= len(train_loader)
         d_loss_epoch /= len(train_loader)
-        print(f'Epoch {epoch} loss_D: {d_loss_epoch:.4f} loss_G: {g_loss_epoch:.4f}')
+        print(f'Epoch {epoch + 1} loss_D: {d_loss_epoch:.4f} loss_G: {g_loss_epoch:.4f}')
     print("Training finished !")
 
     print("Saving the model")
