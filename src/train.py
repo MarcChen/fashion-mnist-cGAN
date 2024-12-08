@@ -26,7 +26,7 @@ def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_p
     print("Dataset loaded !")
 
     print("Loading models...")
-    G, D = Generator().to(device), Discriminator().to(device)
+    G, D = Generator(latent_dim=latent_dim).to(device), Discriminator().to(device)
     optim_G = optim.Adam(G.parameters(), lr=lr, betas=(0.5, 0.999))
     optim_D = optim.Adam(D.parameters(), lr=lr, betas=(0.5, 0.999))
     print("Models loaded !")

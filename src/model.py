@@ -34,7 +34,7 @@ class Generator(nn.Module):
        - latent_dim (int): The dimensionality of the latent space.
 
     """
-    def __init__(self, classes=10, img_size=28, latent_dim=100):
+    def __init__(self, latent_dim, classes=10, img_size=28,):
         super(Generator, self).__init__()
         self.img_shape = (1, img_size, img_size)
         self.label_embedding = nn.Embedding(classes, classes)
