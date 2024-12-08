@@ -73,8 +73,8 @@ def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_p
     print("Training finished !")
 
     print("Saving the model")
-    save_model(G.state_dict, save_path, save_name)
-    save_model(D.state_dict, save_path, save_name)
+    save_model(G.state_dict, save_path, "generator" + save_name)
+    save_model(D.state_dict, save_path, "discriminator" + save_name)
     print(f"Models saved : path {save_path} !")
 
     return
