@@ -7,7 +7,27 @@ from tqdm import tqdm
 import os
 from data_loading import load_dataset, get_transform
 from model import Generator, Discriminator
+import matplotlib.pyplot as plt
 
+def plot_losses(losses, save_path, filename="loss_plot.png"):
+    """
+    Plot and save training losses for Generator and Discriminator.
+    """
+    g_losses, d_losses = losses['g_loss'], losses['d_loss']
+    epochs = range(1, len(g_losses) + 1)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, g_losses, label="Generator Loss")
+    plt.plot(epochs, d_losses, label="Discriminator Loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.title("Training Losses")
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_path, filename))
+    plt.close()
+    print(f"Loss plot saved to {os.path.join(save_path, filename)}")
 
 def get_device():
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -15,11 +35,9 @@ def get_device():
 def save_model(model, save_path, name=""):
     torch.save(model.state_dict(), os.path.join(save_path, name + ".pth"))
 
-def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_path="../checkpoints", save_name=""):
+def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_path="./checkpoints", save_name=""):
     device = get_device()
 
-    print("Loading dataset...")
-    load_dataset(data_path)
     transform = get_transform()
     train_dataset = datasets.FashionMNIST(root=data_path, train=True, download=False, transform=transform)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -77,12 +95,15 @@ def train(data_path, batch_size=64, lr=0.0001, epochs=10, latent_dim=100, save_p
     save_model(D, save_path, "discriminator" + save_name)
     print(f"Models saved : path {save_path} !")
 
+    # Save the loss plot
+    plot_losses(losses, save_path, filename="loss_plot.png")
+
     return
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-dir", default="../data", help="Directory where the dataset is stored.")
-    parser.add_argument("--save-dir", default="../checkpoints", help="Directory where to save the trained model.")
+    parser.add_argument("--data-dir", default="./data", help="Directory where the dataset is stored.")
+    parser.add_argument("--save-dir", default="./checkpoints", help="Directory where to save the trained model.")
     parser.add_argument("--save-name",default="", help="Name of the saved model")
     parser.add_argument("--batch-size", type=int, default=32, help="Batch size for training.")
     parser.add_argument("--epochs", type=int, default=10, help="Number of epochs to train.")

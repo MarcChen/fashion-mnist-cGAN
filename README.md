@@ -27,7 +27,7 @@ This repository implements a **Conditional Generative Adversarial Network (GAN)*
     ```
 2. **Train the Model**: Run the training scripts to fit the Conditional GAN on the Fashion MNIST dataset:
     ```sh
-    python train.py
+    python3 src/train.py
     ```
    parameters:
    - `--epochs`: Number of training epochs (default: 100).
@@ -40,7 +40,7 @@ This repository implements a **Conditional Generative Adversarial Network (GAN)*
 
 3. **Generate Samples**: Use the trained model to generate samples for each class label:
     ```sh
-    python generate_samples.py
+    python3 src/generate.py
     ```
     parameters:
     - `--num_samples`: Number of samples to generate for each class (default: 10).

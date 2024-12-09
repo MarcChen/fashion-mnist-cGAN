@@ -20,7 +20,7 @@ def save_images(images, save_path):
         plt.imsave(f"{save_path}/{i}.png", img, cmap='gray')
     print(f"Images saved successfully : path {save_path}!")
 
-def generate_and_save_images(generator_path, discriminator_path, latent_dim=100, num_images=10, save_path='../samples'):
+def generate_and_save_images(generator_path, discriminator_path, latent_dim=100, num_images=10, save_path='./samples'):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print("Loading the trained models...")
@@ -46,9 +46,9 @@ def generate_and_save_images(generator_path, discriminator_path, latent_dim=100,
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--generator-path", default="../checkpoints/generator.pth", help="Path to the trained generator model.")
-    parser.add_argument("--discriminator-path", default="../checkpoints/discriminator.pth", help="Path to the trained discriminator model.")
-    parser.add_argument("--save-path", default="../samples", help="Path to save the generated")
+    parser.add_argument("--generator-path", default="./checkpoints/generator.pth", help="Path to the trained generator model.")
+    parser.add_argument("--discriminator-path", default="./checkpoints/discriminator.pth", help="Path to the trained discriminator model.")
+    parser.add_argument("--save-path", default="./samples", help="Path to save the generated")
     parser.add_argument("--latent-dim", type=int, default=100, help="Noise dimension for the generator.")
     parser.add_argument("--num-images", type=int, default=10, help="Number of images to generate.")
     args = parser.parse_args()
