@@ -20,8 +20,33 @@ This repository implements a **Conditional Generative Adversarial Network (GAN)*
 
 ## Getting Started
 
-1. **Setup**: Follow the instructions in the `README` to set up the environment and install dependencies.
-2. **Train the Model**: Run the training scripts to fit the Conditional GAN on the Fashion MNIST dataset.
-3. **Analyze Results**: Use provided notebooks to visualize generated samples, monitor learning curves, and extract insights from the model’s latent representations.
+1. **Setup**: Make the setup script executable and run it to install dependencies and download the dataset:
+    ```sh
+    chmod +x ./setup.sh
+    ./setup.sh
+    ```
+2. **Train the Model**: Run the training scripts to fit the Conditional GAN on the Fashion MNIST dataset:
+    ```sh
+    python3 src/train.py
+    ```
+   parameters:
+   - `--epochs`: Number of training epochs (default: 100).
+   - `--batch_size`: Batch size for training (default: 64).
+   - `--latent_dim`: Dimensionality of the latent space (default: 100).
+   - `--lr`: Learning rate for the optimizer (default: 0.0002).
+   - `--data_dir`: Directory to store the Fashion MNIST dataset (default: './data').
+   - `--save_dir`: Directory to save model checkpoints and generated samples (default: './outputs').
+   - `--save-name`: Name of the model checkpoint file.
+
+3. **Generate Samples**: Use the trained model to generate samples for each class label:
+    ```sh
+    python3 src/generate.py
+    ```
+    parameters:
+    - `--num_samples`: Number of samples to generate for each class (default: 10).
+    - `--save_path`: Directory to save the generated samples (default: './outputs').
+    - `--generator_path`: Path to the trained generator model.
+    - `--discriminator_path`: Path to the trained discriminator model.
+    - `--latent_dim`: Dimensionality of the latent space (default: 100).
 
 By engaging with this repository, you will gain practical experience with conditional generative modeling and learn how to leverage data science methods to deepen your understanding of model-generated outputs.
